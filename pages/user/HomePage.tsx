@@ -1,13 +1,16 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Carousel from '../../components/Carousel';
 import ProductCard from '../../components/ProductCard';
 import { useAppContext } from '../../hooks/useAppContext';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import useSEO from '../../hooks/useSEO';
+import { Product } from '../../types';
+import QuickViewModal from '../../components/QuickViewModal';
 
 const ValueProposition: React.FC<{ icon: React.ReactNode; title: string; description: string }> = ({ icon, title, description }) => (
-    <div className="flex flex-col items-center text-center p-4">
-        <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary mb-4">
+    <div className="flex flex-col items-center text-center p-4 group">
+        <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
             {icon}
         </div>
         <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
@@ -32,7 +35,14 @@ const AnimatedSection: React.FC<{ children: React.ReactNode; className?: string;
 
 
 const HomePage: React.FC = () => {
+  useSEO({
+    title: 'Basha Bed Mart | Natural Silk Cotton Mattresses & Bedding',
+    description: 'Discover handcrafted comfort at Basha Bed Mart. Specializing in 100% natural silk cotton (Ilavam Panju) mattresses, pillows, and premium bedding. Sleep better, live better.',
+    keywords: 'Basha Bed Mart, silk cotton mattress, Ilavam Panju, natural bedding, handcrafted mattress, Puducherry, comfortable sleep'
+  });
+
   const { products, isLoggedIn, currentUser } = useAppContext();
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const featuredProducts = products.filter(p => p.isFeatured);
 
   const categories = useMemo(() => {
@@ -52,10 +62,10 @@ const HomePage: React.FC = () => {
             <h2 className="text-3xl font-bold text-gray-800">Welcome back, {currentUser.name}!</h2>
             <p className="text-gray-600 mt-2">Ready to find your perfect sleep solution?</p>
             <div className="mt-4 flex justify-center space-x-4">
-                <Link to="/products" className="bg-primary hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition duration-300">
+                <Link to="/products" className="bg-primary hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition-all duration-300 transform hover:scale-105 active:scale-100">
                     Shop All Products
                 </Link>
-                <Link to="/orders" className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md transition duration-300">
+                <Link to="/orders" className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md transition-all duration-300 transform hover:scale-105 active:scale-100">
                     View Your Orders
                 </Link>
             </div>
@@ -65,7 +75,7 @@ const HomePage: React.FC = () => {
           <h2 className="text-3xl font-bold text-center mb-8">Featured Products</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {featuredProducts.map((product, index) => (
-              <ProductCard key={product.id} product={product} displayType="featured" index={index} />
+              <ProductCard key={product.id} product={product} onQuickView={setQuickViewProduct} index={index} />
             ))}
           </div>
         </AnimatedSection>
@@ -125,6 +135,7 @@ const HomePage: React.FC = () => {
             </div>
         </AnimatedSection>
       </div>
+      <QuickViewModal product={quickViewProduct} onClose={() => setQuickViewProduct(null)} />
     </div>
   );
 };

@@ -1,33 +1,33 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-interface Slide {
-  imageUrl: string;
-  headline: string;
-}
-
-const slides: Slide[] = [
-  { imageUrl: 'https://picsum.photos/seed/carousel1/1600/600', headline: 'Discover the Comfort of Natural Silk Cotton' },
-  { imageUrl: 'https://picsum.photos/seed/carousel2/1600/600', headline: 'Handcrafted Quality in Every Stitch' },
-  { imageUrl: 'https://picsum.photos/seed/carousel3/1600/600', headline: 'Sleep Better, Live Better' },
-];
+import { useAppContext } from '../hooks/useAppContext';
 
 const Carousel: React.FC = () => {
+  const { carouselSlides: slides } = useAppContext();
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
+    if (slides.length === 0) return;
     const timer = setTimeout(() => {
       setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     }, 5000);
     return () => clearTimeout(timer);
-  }, [currentSlide]);
+  }, [currentSlide, slides.length]);
+
+  if (slides.length === 0) {
+    return (
+      <div className="relative w-full h-64 md:h-96 overflow-hidden bg-gray-200 flex items-center justify-center">
+        <p className="text-gray-500">No carousel images have been configured.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full h-64 md:h-96 overflow-hidden">
       {slides.map((slide, index) => (
         <div
-          key={index}
+          key={slide.id}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
         >
           <img src={slide.imageUrl} alt={slide.headline} className="w-full h-full object-cover" />
@@ -35,7 +35,7 @@ const Carousel: React.FC = () => {
             <div className="text-center text-light p-4">
               <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 animate-fade-in-down">{slide.headline}</h2>
               <Link to="/products">
-                <button className="bg-primary hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 transform hover:scale-105">
+                <button className="bg-primary hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-100">
                   Shop Now
                 </button>
               </Link>
@@ -48,7 +48,7 @@ const Carousel: React.FC = () => {
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-colors ${index === currentSlide ? 'bg-primary' : 'bg-white/50'}`}
+            className={`w-3 h-3 rounded-full transition-all duration-200 transform hover:scale-125 ${index === currentSlide ? 'bg-primary' : 'bg-white/50'}`}
           />
         ))}
       </div>

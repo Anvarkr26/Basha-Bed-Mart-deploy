@@ -83,7 +83,7 @@ const AdminProductsPage: React.FC = () => {
         setIsAddModalOpen(false);
     };
 
-    const inputClasses = "w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary focus:border-primary text-white";
+    const inputClasses = "w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary focus:border-primary text-white transition-colors duration-200";
 
     return (
         <div>
@@ -91,7 +91,7 @@ const AdminProductsPage: React.FC = () => {
                 <h1 className="text-3xl font-bold">Manage Products</h1>
                 <button 
                     onClick={openAddModal}
-                    className="bg-secondary hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition-colors"
+                    className="bg-secondary hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition-all duration-200 transform hover:scale-105 active:scale-100"
                 >
                     Add New Product
                 </button>
@@ -129,8 +129,8 @@ const AdminProductsPage: React.FC = () => {
 
             {/* Add Product Modal */}
             {isAddModalOpen && (
-                 <div className="fixed inset-0 bg-black bg-opacity-60 z-40 flex items-center justify-center p-4 transition-opacity duration-300 animate-fade-in-down" onClick={closeAddModal}>
-                    <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-3xl" onClick={(e) => e.stopPropagation()}>
+                 <div className="fixed inset-0 bg-black bg-opacity-60 z-40 flex items-center justify-center p-4 animate-fade-in" onClick={closeAddModal}>
+                    <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-3xl animate-fade-in-down" onClick={(e) => e.stopPropagation()}>
                         <form onSubmit={handleAddProduct} className="max-h-[90vh] overflow-y-auto">
                            <div className="p-8">
                             <h2 className="text-2xl font-bold mb-6 text-white">Add New Product</h2>
@@ -167,10 +167,10 @@ const AdminProductsPage: React.FC = () => {
                                 </div>
                            </div>
                            <div className="flex justify-end space-x-4 p-6 bg-gray-700/50 rounded-b-lg">
-                                <button type="button" onClick={closeAddModal} className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-md transition-colors">
+                                <button type="button" onClick={closeAddModal} className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-md transition-all duration-200 transform hover:scale-105 active:scale-100">
                                     Cancel
                                 </button>
-                                <button type="submit" className="bg-secondary hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition-colors">
+                                <button type="submit" className="bg-secondary hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition-all duration-200 transform hover:scale-105 active:scale-100">
                                     Add Product
                                 </button>
                             </div>
@@ -181,17 +181,17 @@ const AdminProductsPage: React.FC = () => {
             
             {/* Delete Confirmation Modal */}
             {productToDelete && (
-                 <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 transition-opacity duration-300 animate-fade-in-down" onClick={() => setProductToDelete(null)}>
-                    <div className="bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+                 <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 animate-fade-in" onClick={() => setProductToDelete(null)}>
+                    <div className="bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md animate-fade-in-down" onClick={(e) => e.stopPropagation()}>
                         <h2 className="text-2xl font-bold mb-4 text-white">Confirm Deletion</h2>
                         <p className="text-gray-300 mb-6">
                             Are you sure you want to delete the product "{productToDelete.name}"? This action cannot be undone.
                         </p>
                         <div className="flex justify-end space-x-4">
-                            <button onClick={() => setProductToDelete(null)} className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-md transition-colors">
+                            <button onClick={() => setProductToDelete(null)} className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-md transition-all duration-200 transform hover:scale-105 active:scale-100">
                                 Cancel
                             </button>
-                            <button onClick={handleDeleteProduct} className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md transition-colors">
+                            <button onClick={handleDeleteProduct} className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md transition-all duration-200 transform hover:scale-105 active:scale-100">
                                 Delete
                             </button>
                         </div>

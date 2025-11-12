@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppContext } from '../../hooks/useAppContext';
 import { ProductVariant } from '../../types';
+import useSEO from '../../hooks/useSEO';
 
 const WhatsAppIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -40,8 +41,8 @@ const OptionSelector: React.FC<{
                         className={`px-4 py-2 border rounded-md transition-all duration-200 text-sm font-medium ${
                         isSelected
                             ? 'bg-primary text-white border-primary ring-2 ring-primary/50'
-                            : 'bg-white text-gray-700 border-gray-300'
-                        } ${isAvailable ? 'hover:bg-gray-100 cursor-pointer' : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-70'}`}
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-primary/70'
+                        } ${isAvailable ? 'cursor-pointer' : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-70'}`}
                         aria-pressed={isSelected}
                     >
                         {option} {unit}
@@ -57,6 +58,12 @@ const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { products, addToCart } = useAppContext();
   const product = products.find(p => p.id === Number(id));
+
+  useSEO({
+    title: `${product ? product.name : 'Product'} | Basha Bed Mart`,
+    description: product ? product.shortDescription : 'Find high-quality mattresses and bedding at Basha Bed Mart.',
+    keywords: product ? `${product.name}, ${product.category}, ${product.material}, buy online` : 'Basha Bed Mart, mattress, pillow'
+  });
 
   const [quantity, setQuantity] = useState(1);
   const [notification, setNotification] = useState('');
@@ -192,9 +199,9 @@ const ProductDetailPage: React.FC = () => {
           
           <div className="flex items-center space-x-4 mb-8">
             <div className="flex items-center border rounded-md">
-              <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="px-4 py-2 text-lg font-semibold">-</button>
+              <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="px-4 py-2 text-lg font-semibold rounded-md hover:bg-gray-100 transition-colors">-</button>
               <span className="px-4 py-2 text-lg">{quantity}</span>
-              <button onClick={() => setQuantity(q => Math.min(currentVariant?.stock || 1, q + 1))} className="px-4 py-2 text-lg font-semibold">+</button>
+              <button onClick={() => setQuantity(q => Math.min(currentVariant?.stock || 1, q + 1))} className="px-4 py-2 text-lg font-semibold rounded-md hover:bg-gray-100 transition-colors">+</button>
             </div>
             <p className="text-sm text-gray-600">{currentVariant ? (currentVariant.stock > 0 ? `${currentVariant.stock} in stock` : 'Out of stock') : 'Select options'}</p>
           </div>
@@ -202,7 +209,7 @@ const ProductDetailPage: React.FC = () => {
           <button
             onClick={handleAddToCart}
             disabled={!currentVariant || currentVariant.stock === 0}
-            className="w-full max-w-xs flex items-center justify-center gap-2 bg-secondary hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed transform hover:scale-105"
+            className="w-full max-w-xs flex items-center justify-center gap-2 bg-secondary hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed transform hover:scale-105 active:scale-100"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
             <span>{currentVariant && currentVariant.stock > 0 ? 'Add to Cart' : 'Unavailable'}</span>
@@ -215,7 +222,7 @@ const ProductDetailPage: React.FC = () => {
                 href={whatsappShareUrl} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-[#25D366] text-white rounded-md hover:bg-[#128C7E] transition-colors duration-300"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-[#25D366] text-white rounded-md hover:bg-[#128C7E] transition-all duration-300 transform hover:scale-105 active:scale-100"
                 aria-label="Share on WhatsApp"
               >
                 <WhatsAppIcon className="w-5 h-5" />
@@ -223,7 +230,7 @@ const ProductDetailPage: React.FC = () => {
               </a>
               <a 
                 href={smsShareUrl} 
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all duration-300 transform hover:scale-105 active:scale-100"
                 aria-label="Share via SMS"
               >
                 <SmsIcon className="w-5 h-5" />

@@ -1,8 +1,15 @@
 import React from 'react';
 import PhoneIcon from '../../components/icons/PhoneIcon';
 import SocialIcons from '../../components/icons/SocialIcons';
+import useSEO from '../../hooks/useSEO';
 
 const ContactPage: React.FC = () => {
+  useSEO({
+    title: "Contact Us | Basha Bed Mart",
+    description: "Get in touch with Basha Bed Mart. Find our address, phone number, and send us a message. We're located in Moolakulam, Puducherry.",
+    keywords: "contact Basha Bed Mart, Puducherry store, bed mart phone number, location"
+  });
+
   return (
     <div className="bg-white animate-fade-in">
       <div className="container mx-auto px-4 py-16">

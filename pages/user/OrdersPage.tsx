@@ -2,6 +2,7 @@ import React from 'react';
 import { useAppContext } from '../../hooks/useAppContext';
 import { Link } from 'react-router-dom';
 import { Order } from '../../types';
+import useSEO from '../../hooks/useSEO';
 
 const getStatusColor = (status: Order['status']) => {
     switch (status) {
@@ -43,6 +44,12 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => (
 );
 
 const OrdersPage: React.FC = () => {
+    useSEO({
+      title: 'My Orders | Basha Bed Mart',
+      description: 'Track your current and past orders from Basha Bed Mart. View order details, status, and history.',
+      keywords: 'my orders, order history, track order'
+    });
+
     const { orders, currentUser } = useAppContext();
 
     if (!currentUser) {

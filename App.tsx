@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { useAppContext } from './hooks/useAppContext';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -28,14 +29,27 @@ import AdminUserDataPage from './pages/admin/AdminUserDataPage';
 import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 import AdminOrderReportPage from './pages/admin/AdminOrderReportPage';
 import AdminSecurityPage from './pages/admin/AdminSecurityPage';
+import AdminCustomisationPage from './pages/admin/AdminCustomisationPage';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const { siteSettings } = useAppContext();
   
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  useEffect(() => {
+    let favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (!favicon) {
+      favicon = document.createElement('link');
+      favicon.rel = 'icon';
+      document.head.appendChild(favicon);
+    }
+    favicon.href = siteSettings.faviconUrl;
+  }, [siteSettings.faviconUrl]);
+
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -67,6 +81,7 @@ const AppContent: React.FC = () => {
             <Route path="users/:id" element={<AdminUserDataPage />} />
             <Route path="orders" element={<AdminOrdersPage />} />
             <Route path="reports" element={<AdminOrderReportPage />} />
+            <Route path="customisation" element={<AdminCustomisationPage />} />
             <Route path="security" element={<AdminSecurityPage />} />
           </Route>
         </Routes>

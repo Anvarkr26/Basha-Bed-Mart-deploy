@@ -57,7 +57,7 @@ const AdminUsersListPage: React.FC = () => {
         setIsModalOpen(true);
     }
 
-    const inputClasses = "w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary focus:border-primary text-white";
+    const inputClasses = "w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 focus:ring-primary focus:border-primary text-white transition-colors duration-200";
 
     return (
         <div>
@@ -65,7 +65,7 @@ const AdminUsersListPage: React.FC = () => {
                 <h1 className="text-3xl font-bold">Manage Users</h1>
                 <button 
                     onClick={handleOpenModal}
-                    className="bg-secondary hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition-colors"
+                    className="bg-secondary hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition-all duration-200 transform hover:scale-105 active:scale-100"
                 >
                     Add User
                 </button>
@@ -106,8 +106,8 @@ const AdminUsersListPage: React.FC = () => {
 
             {/* Add User Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-60 z-40 flex items-center justify-center p-4 transition-opacity duration-300 animate-fade-in-down" onClick={() => setIsModalOpen(false)}>
-                    <div className="bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+                <div className="fixed inset-0 bg-black bg-opacity-60 z-40 flex items-center justify-center p-4 animate-fade-in" onClick={() => setIsModalOpen(false)}>
+                    <div className="bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md animate-fade-in-down" onClick={(e) => e.stopPropagation()}>
                         <h2 className="text-2xl font-bold mb-6 text-white">Add New User</h2>
                         <form onSubmit={handleAddUserSubmit} className="space-y-4">
                             <div>
@@ -126,10 +126,10 @@ const AdminUsersListPage: React.FC = () => {
                             {error && <p className="text-red-400 text-sm text-center pt-1">{error}</p>}
 
                             <div className="flex justify-end space-x-4 pt-4">
-                                <button type="button" onClick={() => setIsModalOpen(false)} className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-md transition-colors">
+                                <button type="button" onClick={() => setIsModalOpen(false)} className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-md transition-all duration-200 transform hover:scale-105 active:scale-100">
                                     Cancel
                                 </button>
-                                <button type="submit" className="bg-secondary hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition-colors">
+                                <button type="submit" className="bg-secondary hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition-all duration-200 transform hover:scale-105 active:scale-100">
                                     Add User
                                 </button>
                             </div>
@@ -140,8 +140,8 @@ const AdminUsersListPage: React.FC = () => {
 
             {/* Remove User Confirmation Modal */}
             {userToRemove && (
-                <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 transition-opacity duration-300 animate-fade-in-down" onClick={() => setUserToRemove(null)}>
-                    <div className="bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+                <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 animate-fade-in" onClick={() => setUserToRemove(null)}>
+                    <div className="bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md animate-fade-in-down" onClick={(e) => e.stopPropagation()}>
                         <h2 className="text-2xl font-bold mb-4 text-white">Confirm Removal</h2>
                         <p className="text-gray-300 mb-6">
                             Are you sure you want to remove the user "{userToRemove.name}"? This action will also delete all of their associated orders and cannot be undone.
@@ -149,13 +149,13 @@ const AdminUsersListPage: React.FC = () => {
                         <div className="flex justify-end space-x-4">
                             <button
                                 onClick={() => setUserToRemove(null)}
-                                className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-md transition-colors"
+                                className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-md transition-all duration-200 transform hover:scale-105 active:scale-100"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={confirmRemoveUser}
-                                className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md transition-colors"
+                                className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md transition-all duration-200 transform hover:scale-105 active:scale-100"
                             >
                                 Confirm & Remove
                             </button>

@@ -5,11 +5,11 @@ import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 interface ProductCardProps {
   product: Product;
-  displayType?: 'full' | 'featured';
+  onQuickView: (product: Product) => void;
   index?: number;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, displayType = 'full', index = 0 }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView, index = 0 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const isVisible = useIntersectionObserver(ref, { threshold: 0.1, triggerOnce: true });
 
@@ -38,8 +38,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, displayType = 'full'
           </div>
         </div>
       </Link>
-      <div className="p-4 pt-0">
-          <Link to={`/products/${product.id}`} className="w-full text-center bg-secondary hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300 block">
+      <div className="p-4 pt-0 grid grid-cols-2 gap-2">
+          <button 
+            onClick={() => onQuickView(product)}
+            className="w-full text-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-3 rounded-md transition-all duration-300 text-sm active:scale-95"
+          >
+            Quick View
+          </button>
+          <Link to={`/products/${product.id}`} className="w-full text-center bg-secondary hover:bg-green-700 text-white font-semibold py-2 px-3 rounded-md transition-all duration-300 transform hover:scale-105 active:scale-100 block text-sm">
             View Details
           </Link>
       </div>

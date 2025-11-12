@@ -1,6 +1,6 @@
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
-import { Product, CartItem, AppContextType, User, Order, ProductVariant, AdminUser, LoginCredentials, AuthResponse, SiteSettings } from '../types';
-import { PRODUCTS, USERS, ORDERS } from '../constants';
+import { Product, CartItem, AppContextType, User, Order, ProductVariant, AdminUser, LoginCredentials, AuthResponse, SiteSettings, CarouselSlide } from '../types';
+import { PRODUCTS, USERS, ORDERS, CAROUSEL_SLIDES } from '../constants';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -33,8 +33,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(() => getInitialState('siteSettings', { 
     logoUrl: 'https://picsum.photos/seed/logo/40/40',
+    faviconUrl: 'https://picsum.photos/seed/favicon/32/32',
     upiId: 'rakk1426521@okaxis' 
   }));
+
+  const [carouselSlides, setCarouselSlides] = useState<CarouselSlide[]>(() => getInitialState('carouselSlides', CAROUSEL_SLIDES));
+
   
   // Persistence Effects
   useEffect(() => {
@@ -58,6 +62,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   useEffect(() => {
     localStorage.setItem('siteSettings', JSON.stringify(siteSettings));
   }, [siteSettings]);
+
+  useEffect(() => {
+    localStorage.setItem('carouselSlides', JSON.stringify(carouselSlides));
+  }, [carouselSlides]);
 
 
   const addToCart = (product: Product, variant: ProductVariant, quantity: number) => {
@@ -240,17 +248,37 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setSiteSettings(prevSettings => ({ ...prevSettings, ...newSettings }));
   };
 
+  const addCarouselSlide = (slide: Omit<CarouselSlide, 'id'>) => {
+    const newSlide: CarouselSlide = {
+      id: Date.now(),
+      ...slide,
+    };
+    setCarouselSlides(prevSlides => [...prevSlides, newSlide]);
+  };
+
+  const updateCarouselSlide = (updatedSlide: CarouselSlide) => {
+    setCarouselSlides(prevSlides =>
+      prevSlides.map(slide => (slide.id === updatedSlide.id ? updatedSlide : slide))
+    );
+  };
+
+  const removeCarouselSlide = (slideId: number) => {
+    setCarouselSlides(prevSlides => prevSlides.filter(slide => slide.id !== slideId));
+  };
+
   const resetData = () => {
     // Restore all data to initial state from constants.
     setProducts(PRODUCTS);
     setUsers(USERS);
     setOrders(ORDERS);
+    setCarouselSlides(CAROUSEL_SLIDES);
     setCart([]);
     logout();
     // Clear persisted state from localStorage
     localStorage.removeItem('products');
     localStorage.removeItem('users');
     localStorage.removeItem('orders');
+    localStorage.removeItem('carouselSlides');
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('isAdmin');
     localStorage.removeItem('currentUser');
@@ -258,6 +286,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     // Re-initialize site settings to default
     setSiteSettings({ 
       logoUrl: 'https://picsum.photos/seed/logo/40/40',
+      faviconUrl: 'https://picsum.photos/seed/favicon/32/32',
       upiId: 'rakk1426521@okaxis'
     });
   };
@@ -290,6 +319,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     resetData,
     siteSettings,
     updateSiteSettings,
+    carouselSlides,
+    addCarouselSlide,
+    updateCarouselSlide,
+    removeCarouselSlide,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

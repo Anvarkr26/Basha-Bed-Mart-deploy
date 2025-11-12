@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../../hooks/useAppContext';
 import { CartItem } from '../../types';
+import useSEO from '../../hooks/useSEO';
 
 const CartItemRow: React.FC<{ item: CartItem }> = ({ item }) => {
     const { updateQuantity, removeFromCart } = useAppContext();
@@ -13,14 +14,14 @@ const CartItemRow: React.FC<{ item: CartItem }> = ({ item }) => {
                 <div>
                     <h3 className="font-semibold">{item.name}</h3>
                     <p className="text-sm text-gray-600">{item.variantDescription}</p>
-                    <button onClick={() => removeFromCart(item.variantId)} className="text-sm text-red-500 hover:text-red-700 mt-1">Remove</button>
+                    <button onClick={() => removeFromCart(item.variantId)} className="text-sm text-red-500 hover:text-red-700 mt-1 transition-colors duration-150">Remove</button>
                 </div>
             </div>
             <div className="flex items-center space-x-4 sm:space-x-8">
                  <div className="flex items-center border rounded-md">
-                    <button onClick={() => updateQuantity(item.variantId, item.quantity - 1)} className="px-3 py-1">-</button>
+                    <button onClick={() => updateQuantity(item.variantId, item.quantity - 1)} className="px-3 py-1 rounded-md hover:bg-gray-100 transition-colors">-</button>
                     <span className="px-4">{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.variantId, item.quantity + 1)} className="px-3 py-1">+</button>
+                    <button onClick={() => updateQuantity(item.variantId, item.quantity + 1)} className="px-3 py-1 rounded-md hover:bg-gray-100 transition-colors">+</button>
                 </div>
                 <p className="font-semibold w-24 text-right">₹{(item.price * item.quantity).toLocaleString()}</p>
             </div>
@@ -30,6 +31,12 @@ const CartItemRow: React.FC<{ item: CartItem }> = ({ item }) => {
 
 
 const CartPage: React.FC = () => {
+  useSEO({
+    title: 'Shopping Cart | Basha Bed Mart',
+    description: 'Review the items in your shopping cart at Basha Bed Mart and proceed to checkout.',
+    keywords: 'shopping cart, review order, checkout'
+  });
+
   const { cart, getCartTotal, isLoggedIn } = useAppContext();
   const subtotal = getCartTotal();
 
@@ -38,7 +45,7 @@ const CartPage: React.FC = () => {
       <div className="container mx-auto px-4 py-16 text-center animate-fade-in-up">
         <h1 className="text-4xl font-bold mb-4">Your Cart is Empty</h1>
         <p className="text-gray-700 mb-8">Looks like you haven't added anything to your cart yet.</p>
-        <Link to="/products" className="bg-primary hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300">
+        <Link to="/products" className="bg-primary hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-100">
           Continue Shopping
         </Link>
       </div>
@@ -71,11 +78,11 @@ const CartPage: React.FC = () => {
                 <span>₹{subtotal.toLocaleString()}</span>
             </div>
             {isLoggedIn ? (
-                <Link to="/checkout" className="block text-center w-full mt-6 bg-secondary hover:bg-green-700 text-white font-bold py-3 rounded-lg transition duration-300">
+                <Link to="/checkout" className="block text-center w-full mt-6 bg-secondary hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-100">
                     Proceed to Checkout
                 </Link>
             ) : (
-                <Link to="/login" className="block text-center w-full mt-6 bg-primary hover:bg-red-700 text-white font-bold py-3 rounded-lg transition duration-300">
+                <Link to="/login" className="block text-center w-full mt-6 bg-primary hover:bg-red-700 text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-100">
                     Login to Continue
                 </Link>
             )}

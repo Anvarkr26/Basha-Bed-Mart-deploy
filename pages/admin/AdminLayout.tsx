@@ -38,7 +38,7 @@ const AdminLayout: React.FC = () => {
   }
   
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center px-4 py-2 mt-2 text-white transition-colors duration-200 transform rounded-md hover:bg-gray-700 ${isActive ? 'bg-gray-700' : 'hover:text-white'}`;
+    `flex items-center px-4 py-2 mt-2 text-white transition-all duration-200 transform rounded-md hover:bg-gray-700 hover:translate-x-1 ${isActive ? 'bg-gray-700' : 'hover:text-white'}`;
 
 
   return (
@@ -64,10 +64,11 @@ const AdminLayout: React.FC = () => {
           <NavLink to="/admin/orders" className={navLinkClass} onClick={() => setSidebarOpen(false)}>Orders</NavLink>
           <NavLink to="/admin/users" className={navLinkClass} onClick={() => setSidebarOpen(false)}>Users</NavLink>
           <NavLink to="/admin/reports" className={navLinkClass} onClick={() => setSidebarOpen(false)}>Reports</NavLink>
+          <NavLink to="/admin/customisation" className={navLinkClass} onClick={() => setSidebarOpen(false)}>Customisation</NavLink>
           <NavLink to="/admin/security" className={navLinkClass} onClick={() => setSidebarOpen(false)}>Security</NavLink>
         </nav>
         <div className="p-4 border-t border-gray-700">
-            <button onClick={handleLogout} className="w-full text-left flex items-center px-4 py-2 text-white transition-colors duration-200 transform rounded-md hover:bg-gray-700">
+            <button onClick={handleLogout} className="w-full text-left flex items-center px-4 py-2 text-white transition-all duration-200 transform rounded-md hover:bg-gray-700 hover:translate-x-1">
                 Logout
             </button>
         </div>

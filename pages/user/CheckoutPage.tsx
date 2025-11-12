@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../hooks/useAppContext';
+import useSEO from '../../hooks/useSEO';
 
 // Icons for payment methods
 const CardIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>;
@@ -15,6 +16,12 @@ const PhonePeIcon = () => <svg className="w-12 h-auto" viewBox="0 0 100 25" fill
 
 
 const CheckoutPage: React.FC = () => {
+  useSEO({
+    title: 'Checkout | Basha Bed Mart',
+    description: 'Complete your purchase securely. Enter your shipping address and payment details to place your order with Basha Bed Mart.',
+    keywords: 'checkout, secure payment, shipping address'
+  });
+
   const { cart, getCartTotal, placeOrder, currentUser, siteSettings } = useAppContext();
   const navigate = useNavigate();
   const total = getCartTotal();
@@ -99,7 +106,7 @@ const CheckoutPage: React.FC = () => {
       )
   }
 
-  const inputClasses = "w-full mt-1 p-3 bg-white text-black rounded-md border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400";
+  const inputClasses = "w-full mt-1 p-3 bg-white text-black rounded-md border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400 transition-all duration-200";
   const labelClasses = "block text-sm font-medium text-gray-700";
 
   const PaymentMethodOption: React.FC<{ value: string; label: string; icon: React.ReactNode }> = ({ value, label, icon }) => (
@@ -266,13 +273,13 @@ const CheckoutPage: React.FC = () => {
                 </div>
 
                 {step === 'details' && (
-                     <button type="submit" className="w-full mt-6 bg-primary hover:bg-red-700 text-white font-bold py-3 rounded-lg transition duration-300 text-lg transform hover:scale-105">
+                     <button type="submit" className="w-full mt-6 bg-primary hover:bg-red-700 text-white font-bold py-3 rounded-lg transition-all duration-300 text-lg transform hover:scale-105 active:scale-100">
                         Proceed to Payment
                     </button>
                 )}
                 
                  {step === 'payment' && paymentMethod !== 'upi' && (
-                    <button type="button" onClick={handleConfirmAndPay} disabled={isProcessing} className="w-full mt-6 bg-secondary hover:bg-green-700 text-white font-bold py-3 rounded-lg transition duration-300 text-lg transform hover:scale-105 flex justify-center items-center disabled:bg-gray-400 disabled:cursor-not-allowed">
+                    <button type="button" onClick={handleConfirmAndPay} disabled={isProcessing} className="w-full mt-6 bg-secondary hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-all duration-300 text-lg transform hover:scale-105 flex justify-center items-center disabled:bg-gray-400 disabled:cursor-not-allowed active:scale-100">
                         {isProcessing ? (
                             <>
                                 <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

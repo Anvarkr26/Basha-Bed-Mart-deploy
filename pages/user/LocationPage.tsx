@@ -1,6 +1,13 @@
 import React from 'react';
+import useSEO from '../../hooks/useSEO';
 
 const LocationPage: React.FC = () => {
+  useSEO({
+    title: "Our Location | Basha Bed Mart, Puducherry",
+    description: "Visit our store at No.44, Villianur Main Road, Moolakulam, Puducherry. Get directions and see our location on the map.",
+    keywords: "Basha Bed Mart location, bed store near me, mattress shop Puducherry"
+  });
+
   const shopLocation = "No.44, Villianur Main Road, Moolakulam, Puducherry - 605010";
   const mapQuery = encodeURIComponent(shopLocation);
   const mapUrl = `https://www.google.com/maps?q=${mapQuery}&output=embed`;

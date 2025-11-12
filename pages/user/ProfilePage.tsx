@@ -1,8 +1,15 @@
 import React from 'react';
 import { useAppContext } from '../../hooks/useAppContext';
 import { Link } from 'react-router-dom';
+import useSEO from '../../hooks/useSEO';
 
 const ProfilePage: React.FC = () => {
+    useSEO({
+      title: 'My Profile | Basha Bed Mart',
+      description: 'View and manage your personal details, shipping addresses, and see quick links to your orders at Basha Bed Mart.',
+      keywords: 'my account, profile, user details, addresses'
+    });
+
     const { currentUser } = useAppContext();
 
     if (!currentUser) {

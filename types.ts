@@ -4,6 +4,12 @@ export interface AdminUser {
   password: string;
 }
 
+export interface CarouselSlide {
+  id: number;
+  imageUrl: string;
+  headline: string;
+}
+
 export interface ProductVariant {
   id: number;
   size: string;
@@ -86,6 +92,7 @@ export interface AuthResponse {
 
 export interface SiteSettings {
   logoUrl: string;
+  faviconUrl: string;
   upiId: string;
 }
 
@@ -117,4 +124,8 @@ export interface AppContextType {
   resetData: () => void;
   siteSettings: SiteSettings;
   updateSiteSettings: (newSettings: Partial<SiteSettings>) => void;
+  carouselSlides: CarouselSlide[];
+  addCarouselSlide: (slide: Omit<CarouselSlide, 'id'>) => void;
+  updateCarouselSlide: (updatedSlide: CarouselSlide) => void;
+  removeCarouselSlide: (slideId: number) => void;
 }

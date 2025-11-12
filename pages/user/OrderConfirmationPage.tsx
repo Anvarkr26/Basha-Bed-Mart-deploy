@@ -1,8 +1,15 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
+import useSEO from '../../hooks/useSEO';
 
 const OrderConfirmationPage: React.FC = () => {
     const { orderId } = useParams<{ orderId: string }>();
+
+    useSEO({
+      title: 'Order Confirmed | Basha Bed Mart',
+      description: 'Your order has been successfully placed. Thank you for shopping with Basha Bed Mart.',
+      keywords: 'order confirmation, order success, thank you'
+    });
 
     return (
         <div className="container mx-auto px-4 py-16 text-center animate-fade-in">

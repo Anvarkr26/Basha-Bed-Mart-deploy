@@ -3,31 +3,18 @@ import ShieldIcon from '../../components/icons/ShieldIcon';
 import { useAppContext } from '../../hooks/useAppContext';
 
 const AdminSecurityPage: React.FC = () => {
-    const { adminUsers, addAdminUser, removeAdminUser, resetData, siteSettings, updateSiteSettings } = useAppContext();
+    const { adminUsers, addAdminUser, removeAdminUser, resetData } = useAppContext();
 
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [message, setMessage] = useState('');
     const [resetMessage, setResetMessage] = useState('');
-    const [upiIdInput, setUpiIdInput] = useState(siteSettings.upiId);
-    const [upiMessage, setUpiMessage] = useState('');
 
     const handlePasswordSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         alert("Password updated successfully! (This is a mock action)");
     };
     
-    const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                updateSiteSettings({ logoUrl: reader.result as string });
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
     const handleAddAdminSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!newUsername || !newPassword) {
@@ -39,17 +26,6 @@ const AdminSecurityPage: React.FC = () => {
         setNewPassword('');
         setMessage(`Admin user '${newUsername}' added successfully.`);
         setTimeout(() => setMessage(''), 3000);
-    };
-
-    const handleUpiIdSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (upiIdInput.trim() === '') {
-            setUpiMessage('UPI ID cannot be empty.');
-            return;
-        }
-        updateSiteSettings({ upiId: upiIdInput.trim() });
-        setUpiMessage('UPI ID updated successfully.');
-        setTimeout(() => setUpiMessage(''), 3000);
     };
 
     const handleResetData = () => {
@@ -67,50 +43,6 @@ const AdminSecurityPage: React.FC = () => {
             <h1 className="text-3xl font-bold mb-6">Security & Site Settings</h1>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Site Branding & Payment */}
-                <div className="bg-gray-800 rounded-lg shadow-md p-8 lg:col-span-2">
-                     <div className="flex items-center space-x-3 mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" /></svg>
-                        <h2 className="text-2xl font-semibold">Site & Payment Settings</h2>
-                    </div>
-                    {/* Logo Section */}
-                    <div className="mb-8">
-                        <label htmlFor="logo-upload" className="block text-sm font-medium text-gray-200 mb-2">Header Logo</label>
-                        <div className="flex items-center space-x-4">
-                            <img src={siteSettings.logoUrl} alt="Current logo" className="h-12 w-12 rounded-full bg-gray-700 object-cover" />
-                            <input
-                                type="file"
-                                id="logo-upload"
-                                accept="image/*"
-                                onChange={handleLogoChange}
-                                className="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary/20 file:text-primary hover:file:bg-primary/30 cursor-pointer"
-                            />
-                        </div>
-                        <p className="text-xs text-gray-400 mt-2">Recommended size: 40x40 pixels. Upload a new image to replace the current one.</p>
-                    </div>
-
-                    {/* UPI Section */}
-                    <div className="border-t border-gray-700 pt-6">
-                         <form onSubmit={handleUpiIdSubmit}>
-                            <label htmlFor="upi-id" className="block text-sm font-medium text-gray-200 mb-2">UPI ID for Payments</label>
-                            <div className="flex items-center space-x-2">
-                                <input
-                                    type="text"
-                                    id="upi-id"
-                                    value={upiIdInput}
-                                    onChange={(e) => setUpiIdInput(e.target.value)}
-                                    className={`${inputClasses} flex-grow`}
-                                    placeholder="your-upi-id@okhdfcbank"
-                                />
-                                <button type="submit" className="bg-secondary hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition-colors">
-                                    Update
-                                </button>
-                            </div>
-                            {upiMessage && <p className="text-green-400 text-xs mt-2">{upiMessage}</p>}
-                        </form>
-                    </div>
-                </div>
-
                 {/* Change Password */}
                 <div className="bg-gray-800 rounded-lg shadow-md p-8 self-start">
                     <div className="flex items-center space-x-3 mb-6">

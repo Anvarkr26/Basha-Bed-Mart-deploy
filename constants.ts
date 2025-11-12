@@ -1,4 +1,10 @@
-import { Product, User, Order, CartItem } from './types';
+import { Product, User, Order, CartItem, CarouselSlide } from './types';
+
+export const CAROUSEL_SLIDES: CarouselSlide[] = [
+  { id: 1, imageUrl: 'https://picsum.photos/seed/carousel1/1600/600', headline: 'Discover the Comfort of Natural Silk Cotton' },
+  { id: 2, imageUrl: 'https://picsum.photos/seed/carousel2/1600/600', headline: 'Handcrafted Quality in Every Stitch' },
+  { id: 3, imageUrl: 'https://picsum.photos/seed/carousel3/1600/600', headline: 'Sleep Better, Live Better' },
+];
 
 export const PRODUCTS: Product[] = [
   {
