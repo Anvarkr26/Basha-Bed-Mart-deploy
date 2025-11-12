@@ -89,7 +89,7 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-8">
             <div className="flex items-center space-x-2">
-               <img src="https://drive.google.com/file/d/1MrkOgyyBh2kT6aMbMVurl_tiSB3Sk1Jo/view?usp=drive_link" alt="Basha Bed Mart Logo" className="h-10 w-10 rounded-full" />
+               <img src="https://drive.google.com/file/d/1MrkOgyyBh2kT6aMbMVurl_tiSB3Sk1Jo/view?usp=sharing" alt="Basha Bed Mart Logo" className="h-10 w-10 rounded-full" />
               <Link to="/" className="text-xl md:text-2xl font-bold text-dark whitespace-nowrap">
                 Basha Bed Mart
               </Link>
