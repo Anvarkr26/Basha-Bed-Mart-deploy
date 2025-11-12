@@ -66,12 +66,18 @@ const CheckoutPage: React.FC = () => {
     const upiUrl = `upi://pay?pa=${siteSettings.upiId}&pn=Basha%20Bed%20Mart&am=${total}&cu=INR&tn=Order%20from%20Basha%20Bed%20Mart`;
     window.location.href = upiUrl;
 
+    // Simulate waiting for user to complete payment in their app
     setTimeout(() => {
-        const orderId = placeOrder(shippingDetails);
-        if (orderId) {
-            navigate(`/order-confirmation/${orderId}`);
-        } else {
-            alert("There was an issue placing your order.");
+        try {
+            const orderId = placeOrder(shippingDetails);
+            if (orderId) {
+                navigate(`/order-confirmation/${orderId}`);
+            } else {
+                alert("There was an issue placing your order.");
+                setIsProcessing(false);
+            }
+        } catch (error) {
+            alert("An error occurred while placing your order. Please try again.");
             setIsProcessing(false);
         }
     }, 6000);
@@ -80,14 +86,20 @@ const CheckoutPage: React.FC = () => {
 
   const handleConfirmAndPay = () => {
     setIsProcessing(true);
+    // Simulate payment gateway processing time
     setTimeout(() => {
-        const paymentSuccessful = true;
+        const paymentSuccessful = true; // Mock success
         if (paymentSuccessful) {
-            const orderId = placeOrder(shippingDetails);
-            if (orderId) {
-                navigate(`/order-confirmation/${orderId}`);
-            } else {
-                alert("There was an issue placing your order. Your cart might be empty or you might not be logged in.");
+            try {
+                const orderId = placeOrder(shippingDetails);
+                if (orderId) {
+                    navigate(`/order-confirmation/${orderId}`);
+                } else {
+                    alert("There was an issue placing your order. Your cart might be empty or you might not be logged in.");
+                    setIsProcessing(false);
+                }
+            } catch (error) {
+                alert("An error occurred while placing your order. Please try again.");
                 setIsProcessing(false);
             }
         } else {

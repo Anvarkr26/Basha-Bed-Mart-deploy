@@ -59,7 +59,7 @@ const AdminCustomisationPage: React.FC = () => {
             alert('Image URL and Headline are required.');
             return;
         }
-        if (isEditing) updateCarouselSlide(currentSlide);
+        if (isEditing) updateCarouselSlide(currentSlide as CarouselSlide);
         else addCarouselSlide(currentSlide);
         closeModal();
     };

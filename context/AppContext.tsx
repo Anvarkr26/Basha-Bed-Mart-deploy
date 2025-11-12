@@ -4,8 +4,46 @@ import { PRODUCTS, USERS, ORDERS, CAROUSEL_SLIDES } from '../constants';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-// Helper function to get initial state from localStorage
-const getInitialState = <T,>(key: string, defaultValue: T): T => {
+const LOCAL_STORAGE_KEY = 'basha-bed-mart-data';
+
+// --- LocalStorage Helper Functions ---
+
+// Data structure for the stored state
+interface AppState {
+    products: Product[];
+    users: User[];
+    orders: Order[];
+    siteSettings: SiteSettings;
+    carouselSlides: CarouselSlide[];
+}
+
+const loadStateFromLocalStorage = (): AppState => {
+    try {
+        const serializedState = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (serializedState === null) {
+            // No state in localStorage, return initial state from constants
+            return {
+                products: PRODUCTS,
+                users: USERS,
+                orders: ORDERS,
+                carouselSlides: CAROUSEL_SLIDES,
+                siteSettings: {
+                    logoUrl: 'https://picsum.photos/seed/logo/40/40',
+                    faviconUrl: 'https://picsum.photos/seed/favicon/32/32',
+                    upiId: 'rakk1426521@okaxis'
+                }
+            };
+        }
+        return JSON.parse(serializedState);
+    } catch (e) {
+        console.warn("Could not load state from local storage. Using default state.", e);
+        // Fallback to initial state if there's an error
+        return { products: PRODUCTS, users: USERS, orders: ORDERS, carouselSlides: CAROUSEL_SLIDES, siteSettings: { logoUrl: '', faviconUrl: '', upiId: '' } };
+    }
+};
+
+// Helper to get session state from localStorage (for non-synced data)
+const getSessionState = <T,>(key: string, defaultValue: T): T => {
   try {
     const item = window.localStorage.getItem(key);
     return item ? JSON.parse(item) : defaultValue;
@@ -15,57 +53,39 @@ const getInitialState = <T,>(key: string, defaultValue: T): T => {
   }
 };
 
-
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [products, setProducts] = useState<Product[]>(() => getInitialState('products', PRODUCTS));
-  const [cart, setCart] = useState<CartItem[]>([]);
-  
-  // Authentication State with localStorage persistence
-  const [users, setUsers] = useState<User[]>(() => getInitialState('users', USERS));
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => getInitialState('isLoggedIn', false));
-  const [isAdmin, setIsAdmin] = useState<boolean>(() => getInitialState('isAdmin', false));
-  const [currentUser, setCurrentUser] = useState<User | null>(() => getInitialState('currentUser', null));
+    // --- Data State (Synced with localStorage) ---
+    const [products, setProducts] = useState<Product[]>(() => loadStateFromLocalStorage().products);
+    const [users, setUsers] = useState<User[]>(() => loadStateFromLocalStorage().users);
+    const [orders, setOrders] = useState<Order[]>(() => loadStateFromLocalStorage().orders);
+    const [siteSettings, setSiteSettings] = useState<SiteSettings>(() => loadStateFromLocalStorage().siteSettings);
+    const [carouselSlides, setCarouselSlides] = useState<CarouselSlide[]>(() => loadStateFromLocalStorage().carouselSlides);
 
-  const [orders, setOrders] = useState<Order[]>(() => getInitialState('orders', ORDERS));
-  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([
-    { id: 1, username: 'Anvar', password: 'Anvar@26' }
-  ]);
-  
-  const [siteSettings, setSiteSettings] = useState<SiteSettings>(() => getInitialState('siteSettings', { 
-    logoUrl: 'https://picsum.photos/seed/logo/40/40',
-    faviconUrl: 'https://picsum.photos/seed/favicon/32/32',
-    upiId: 'rakk1426521@okaxis' 
-  }));
+    // --- Session State (Local to device, not synced in main object) ---
+    const [cart, setCart] = useState<CartItem[]>([]);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => getSessionState('isLoggedIn', false));
+    const [isAdmin, setIsAdmin] = useState<boolean>(() => getSessionState('isAdmin', false));
+    const [currentUser, setCurrentUser] = useState<User | null>(() => getSessionState('currentUser', null));
+    const [adminUsers, setAdminUsers] = useState<AdminUser[]>([
+        { id: 1, username: 'Anvar', password: 'Anvar@26' }
+    ]);
 
-  const [carouselSlides, setCarouselSlides] = useState<CarouselSlide[]>(() => getInitialState('carouselSlides', CAROUSEL_SLIDES));
+    // --- Core Data Sync to localStorage ---
+    useEffect(() => {
+        const stateToSave: AppState = { products, users, orders, siteSettings, carouselSlides };
+        try {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
+        } catch (e) {
+            console.error("Failed to save state to local storage:", e);
+        }
+    }, [products, users, orders, siteSettings, carouselSlides]);
 
-  
-  // Persistence Effects
-  useEffect(() => {
-    localStorage.setItem('products', JSON.stringify(products));
-  }, [products]);
-
-  useEffect(() => {
-    localStorage.setItem('users', JSON.stringify(users));
-  }, [users]);
-
-  useEffect(() => {
-    localStorage.setItem('orders', JSON.stringify(orders));
-  }, [orders]);
-  
-  useEffect(() => {
-    localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
-    localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
-    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-  }, [isLoggedIn, isAdmin, currentUser]);
-
-  useEffect(() => {
-    localStorage.setItem('siteSettings', JSON.stringify(siteSettings));
-  }, [siteSettings]);
-
-  useEffect(() => {
-    localStorage.setItem('carouselSlides', JSON.stringify(carouselSlides));
-  }, [carouselSlides]);
+    // Persist session state to localStorage
+    useEffect(() => {
+        localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
+        localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    }, [isLoggedIn, isAdmin, currentUser]);
 
 
   const addToCart = (product: Product, variant: ProductVariant, quantity: number) => {
@@ -160,12 +180,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setIsLoggedIn(false);
     setIsAdmin(false);
     setCurrentUser(null);
+    // Session state is cleared via useEffect
   };
 
   const updateProduct = (updatedProduct: Product) => {
-    setProducts(prevProducts =>
-      prevProducts.map(p => (p.id === updatedProduct.id ? updatedProduct : p))
-    );
+    setProducts(prevProducts => prevProducts.map(p => (p.id === updatedProduct.id ? updatedProduct : p)));
   };
 
   const addProduct = (productData: Omit<Product, 'id'>) => {
@@ -197,7 +216,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   const removeUser = (userId: number) => {
-    // Also remove user's orders to maintain data integrity
+    // Also remove user's orders for data consistency
     setOrders(prevOrders => prevOrders.filter(order => order.userId !== userId));
     setUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
   };
@@ -220,9 +239,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   const updateOrderStatus = (orderId: string, status: Order['status']) => {
-    setOrders(prevOrders => 
-        prevOrders.map(order => order.id === orderId ? {...order, status} : order)
-    );
+    setOrders(prevOrders => prevOrders.map(order => order.id === orderId ? {...order, status} : order));
   };
 
   const addAdminUser = (username: string, password: string) => {
@@ -257,9 +274,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   const updateCarouselSlide = (updatedSlide: CarouselSlide) => {
-    setCarouselSlides(prevSlides =>
-      prevSlides.map(slide => (slide.id === updatedSlide.id ? updatedSlide : slide))
-    );
+    setCarouselSlides(prevSlides => prevSlides.map(slide => (slide.id === updatedSlide.id ? updatedSlide : slide)));
   };
 
   const removeCarouselSlide = (slideId: number) => {
@@ -267,28 +282,20 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   const resetData = () => {
-    // Restore all data to initial state from constants.
-    setProducts(PRODUCTS);
-    setUsers(USERS);
-    setOrders(ORDERS);
-    setCarouselSlides(CAROUSEL_SLIDES);
-    setCart([]);
-    logout();
-    // Clear persisted state from localStorage
-    localStorage.removeItem('products');
-    localStorage.removeItem('users');
-    localStorage.removeItem('orders');
-    localStorage.removeItem('carouselSlides');
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('isAdmin');
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('siteSettings');
-    // Re-initialize site settings to default
-    setSiteSettings({ 
-      logoUrl: 'https://picsum.photos/seed/logo/40/40',
-      faviconUrl: 'https://picsum.photos/seed/favicon/32/32',
-      upiId: 'rakk1426521@okaxis'
-    });
+     if (window.confirm('Are you sure you want to reset all application data (products, users, orders)? This action cannot be undone.')) {
+        setProducts(PRODUCTS);
+        setUsers(USERS);
+        setOrders(ORDERS);
+        setCarouselSlides(CAROUSEL_SLIDES);
+        setSiteSettings({
+            logoUrl: 'https://picsum.photos/seed/logo/40/40',
+            faviconUrl: 'https://picsum.photos/seed/favicon/32/32',
+            upiId: 'rakk1426521@okaxis'
+        });
+        setCart([]);
+        logout();
+        alert('Application data has been reset successfully.');
+    }
   };
 
   const value = {

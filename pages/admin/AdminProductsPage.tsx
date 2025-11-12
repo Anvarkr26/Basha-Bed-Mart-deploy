@@ -61,14 +61,22 @@ const AdminProductsPage: React.FC = () => {
             alert('Product Name, Category, and a valid Price are required.');
             return;
         }
-        addProduct(newProduct);
-        closeAddModal();
+        try {
+            addProduct(newProduct);
+            closeAddModal();
+        } catch (error) {
+            alert('Failed to add product. Please try again.');
+        }
     };
 
     const handleDeleteProduct = () => {
         if (productToDelete) {
-            removeProduct(productToDelete.id);
-            setProductToDelete(null);
+            try {
+                removeProduct(productToDelete.id);
+                setProductToDelete(null);
+            } catch (error) {
+                alert('Failed to delete product. Please try again.');
+            }
         }
     };
     

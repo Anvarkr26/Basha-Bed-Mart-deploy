@@ -50,7 +50,6 @@ const AppContent: React.FC = () => {
     favicon.href = siteSettings.faviconUrl;
   }, [siteSettings.faviconUrl]);
 
-
   return (
     <div className="flex flex-col min-h-screen">
       {!isAdminRoute && <Header />}
