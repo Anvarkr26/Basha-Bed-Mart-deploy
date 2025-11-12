@@ -15,7 +15,7 @@ const PhonePeIcon = () => <svg className="w-12 h-auto" viewBox="0 0 100 25" fill
 
 
 const CheckoutPage: React.FC = () => {
-  const { cart, getCartTotal, placeOrder, currentUser } = useAppContext();
+  const { cart, getCartTotal, placeOrder, currentUser, siteSettings } = useAppContext();
   const navigate = useNavigate();
   const total = getCartTotal();
   
@@ -56,7 +56,7 @@ const CheckoutPage: React.FC = () => {
 
   const handleUpiAppPayment = () => {
     setIsProcessing(true);
-    const upiUrl = `upi://pay?pa=rakk1426521@okaxis&pn=Basha%20Bed%20Mart&am=${total}&cu=INR&tn=Order%20from%20Basha%20Bed%20Mart`;
+    const upiUrl = `upi://pay?pa=${siteSettings.upiId}&pn=Basha%20Bed%20Mart&am=${total}&cu=INR&tn=Order%20from%20Basha%20Bed%20Mart`;
     window.location.href = upiUrl;
 
     setTimeout(() => {
@@ -209,13 +209,13 @@ const CheckoutPage: React.FC = () => {
                                         <div className="text-sm text-gray-500 my-4">OR</div>
                                         <p className="text-gray-700 mb-4">Scan the QR code to pay.</p>
                                         <img 
-                                            src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=rakk1426521@okaxis&pn=Basha%20Bed%20Mart&am=${total}&cu=INR`}
+                                            src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(`upi://pay?pa=${siteSettings.upiId}&pn=Basha%20Bed%20Mart&am=${total}&cu=INR`)}`}
                                             alt="UPI QR Code"
                                             className="w-48 h-48 rounded-lg shadow-md"
                                         />
                                         <div className="mt-4 bg-white p-3 rounded-md border w-full max-w-sm">
                                             <p className="font-semibold text-gray-800">Pay to UPI ID:</p>
-                                            <p className="font-mono text-primary text-lg tracking-wider">rakk1426521@okaxis</p>
+                                            <p className="font-mono text-primary text-lg tracking-wider">{siteSettings.upiId}</p>
                                         </div>
                                     </>
                                 ) : (

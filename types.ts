@@ -86,6 +86,7 @@ export interface AuthResponse {
 
 export interface SiteSettings {
   logoUrl: string;
+  upiId: string;
 }
 
 export interface AppContextType {

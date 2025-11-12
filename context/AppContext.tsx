@@ -31,7 +31,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     { id: 1, username: 'Anvar', password: 'Anvar@26' }
   ]);
   
-  const [siteSettings, setSiteSettings] = useState<SiteSettings>(() => getInitialState('siteSettings', { logoUrl: 'https://picsum.photos/seed/logo/40/40' }));
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>(() => getInitialState('siteSettings', { 
+    logoUrl: 'https://picsum.photos/seed/logo/40/40',
+    upiId: 'rakk1426521@okaxis' 
+  }));
   
   // Persistence Effects
   useEffect(() => {
@@ -253,7 +256,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     localStorage.removeItem('currentUser');
     localStorage.removeItem('siteSettings');
     // Re-initialize site settings to default
-    setSiteSettings({ logoUrl: 'https://picsum.photos/seed/logo/40/40' });
+    setSiteSettings({ 
+      logoUrl: 'https://picsum.photos/seed/logo/40/40',
+      upiId: 'rakk1426521@okaxis'
+    });
   };
 
   const value = {
