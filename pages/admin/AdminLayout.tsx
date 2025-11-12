@@ -5,7 +5,7 @@ import ShieldIcon from '../../components/icons/ShieldIcon';
 
 const MenuIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
   </svg>
 );
 
@@ -76,7 +76,7 @@ const AdminLayout: React.FC = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="h-16 bg-gray-800 border-b border-gray-700 flex items-center px-4 lg:px-6 justify-between lg:justify-end flex-shrink-0">
-            <button className="lg:hidden text-white p-2 -ml-2" onClick={() => setSidebarOpen(true)}>
+            <button className="lg:hidden text-white p-2 -ml-2 hover:text-primary transition-colors duration-200" onClick={() => setSidebarOpen(true)}>
                <span className="sr-only">Open sidebar</span>
                <MenuIcon className="h-6 w-6" />
             </button>

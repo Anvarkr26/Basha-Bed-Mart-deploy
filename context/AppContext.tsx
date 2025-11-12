@@ -1,5 +1,5 @@
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
-import { Product, CartItem, AppContextType, User, Order, ProductVariant, AdminUser, LoginCredentials, AuthResponse } from '../types';
+import { Product, CartItem, AppContextType, User, Order, ProductVariant, AdminUser, LoginCredentials, AuthResponse, SiteSettings } from '../types';
 import { PRODUCTS, USERS, ORDERS } from '../constants';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -31,6 +31,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     { id: 1, username: 'Anvar', password: 'Anvar@26' }
   ]);
   
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>(() => getInitialState('siteSettings', { logoUrl: 'https://picsum.photos/seed/logo/40/40' }));
+  
   // Persistence Effects
   useEffect(() => {
     localStorage.setItem('products', JSON.stringify(products));
@@ -49,6 +51,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     localStorage.setItem('isAdmin', JSON.stringify(isAdmin));
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
   }, [isLoggedIn, isAdmin, currentUser]);
+
+  useEffect(() => {
+    localStorage.setItem('siteSettings', JSON.stringify(siteSettings));
+  }, [siteSettings]);
 
 
   const addToCart = (product: Product, variant: ProductVariant, quantity: number) => {
@@ -226,6 +232,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
     setAdminUsers(prevAdmins => prevAdmins.filter(admin => admin.id !== id));
   };
+  
+  const updateSiteSettings = (newSettings: Partial<SiteSettings>) => {
+    setSiteSettings(prevSettings => ({ ...prevSettings, ...newSettings }));
+  };
 
   const resetData = () => {
     // Restore all data to initial state from constants.
@@ -241,6 +251,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('isAdmin');
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('siteSettings');
+    // Re-initialize site settings to default
+    setSiteSettings({ logoUrl: 'https://picsum.photos/seed/logo/40/40' });
   };
 
   const value = {
@@ -269,6 +282,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     addAdminUser,
     removeAdminUser,
     resetData,
+    siteSettings,
+    updateSiteSettings,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

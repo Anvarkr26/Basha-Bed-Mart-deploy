@@ -84,6 +84,10 @@ export interface AuthResponse {
     message?: string;
 }
 
+export interface SiteSettings {
+  logoUrl: string;
+}
+
 export interface AppContextType {
   products: Product[];
   cart: CartItem[];
@@ -110,4 +114,6 @@ export interface AppContextType {
   addAdminUser: (username: string, password: string) => void;
   removeAdminUser: (id: number) => void;
   resetData: () => void;
+  siteSettings: SiteSettings;
+  updateSiteSettings: (newSettings: Partial<SiteSettings>) => void;
 }

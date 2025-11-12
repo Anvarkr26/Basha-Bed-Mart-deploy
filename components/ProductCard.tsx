@@ -16,7 +16,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, displayType = 'full'
   return (
     <div 
       ref={ref}
-      className={`bg-white rounded-lg shadow-md overflow-hidden transform hover:-translate-y-1 transition-all duration-300 group flex flex-col ${isVisible ? 'animate-zoom-in' : 'opacity-0'}`}
+      className={`bg-white rounded-lg shadow-md hover:shadow-xl overflow-hidden transform hover:-translate-y-1 transition-all duration-300 group flex flex-col ${isVisible ? 'animate-zoom-in' : 'opacity-0'}`}
       style={{ animationDelay: `${index * 75}ms` }}
     >
       <Link to={`/products/${product.id}`} className="block flex-grow">

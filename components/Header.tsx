@@ -66,7 +66,7 @@ const UserMenu: React.FC = () => {
 
 
 const Header: React.FC = () => {
-  const { isLoggedIn, logout } = useAppContext();
+  const { isLoggedIn, logout, siteSettings } = useAppContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
@@ -89,7 +89,7 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-8">
             <div className="flex items-center space-x-2">
-               <img src="./Website/LOGO1.jpg" alt="Basha Bed Mart Logo" className="h-10 w-10 rounded-full" />
+               <img src={siteSettings.logoUrl} alt="Basha Bed Mart Logo" className="h-10 w-10 rounded-full object-cover" />
               <Link to="/" className="text-xl md:text-2xl font-bold text-dark whitespace-nowrap">
                 Basha Bed Mart
               </Link>
