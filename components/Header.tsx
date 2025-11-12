@@ -89,7 +89,7 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-8">
             <div className="flex items-center space-x-2">
-               <img src="https://github.com/Anvarkr26/Basha-Bed-Mart-deploy/components/Website/LOGO1.jpg" alt="Basha Bed Mart Logo" className="h-10 w-10 rounded-full" />
+               <img src="./Website/LOGO1.jpg" alt="Basha Bed Mart Logo" className="h-10 w-10 rounded-full" />
               <Link to="/" className="text-xl md:text-2xl font-bold text-dark whitespace-nowrap">
                 Basha Bed Mart
               </Link>
